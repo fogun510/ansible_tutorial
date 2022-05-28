@@ -1,0 +1,30 @@
+---
+#- hosts: all
+#  become: yes
+#  tasks: 
+  - name: Creating a file and populating with content
+    copy:
+      dest: "/home/fogun/wrkdir/test_file.txt"
+      content:
+       "Line1 - This is an entry in my file\n"
+      owner: fogun
+      group: fogun
+      mode: 0775
+    register: file_create
+  - debug:
+     var: file_create
+
+  - name: Check if file exists
+    stat:
+      path: "{{ file_create.dest }}"
+    register: myfile_exists
+  - debug:
+     var: myfile_exists.stat.path
+
+  - name: Renaming file to standard format
+    shell: | 
+           umask 0022
+           mv "{{ myfile_exists.stat.path }}" /home/fogun/wrkdir/test_file_MOVED.txt
+
+# ansible-playbook --ask-become-pass test_rename_file.yml --syntax-check 
+# # ansible-playbook --ask-become-pass test_rename_file.yml 
