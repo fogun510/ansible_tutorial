@@ -2,6 +2,8 @@
 - hosts: all
   become: yes
   gather_facts: yes
+#  vars:
+#   ansible-become-pass: oracle
   roles:
     - role: createfile
 

@@ -1,0 +1,8 @@
+---
+- name: Starting & Stopping Services
+  hosts: myserver
+  tasks:
+    - service: name=httpd state=started
+      when: ansible_host == "10.0.2.4"
+...
+

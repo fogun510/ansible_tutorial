@@ -1,0 +1,7 @@
+---
+# handlers file for /home/fogun/ansible_tutorial/roles/apache
+#
+    - name: Restart  Apache Service
+      service:
+        name: httpd
+        state: restarted

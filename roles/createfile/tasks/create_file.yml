@@ -21,10 +21,19 @@
   - debug:
      var: myfile_exists.stat.path
 
-  - name: Renaming file to standard format
-    shell: | 
-           umask 0022
-           mv "{{ myfile_exists.stat.path }}" /home/fogun/wrkdir/test_file_MOVED.txt
+#  - name: Renaming file to standard format
+#    shell: | 
+#           umask 0022
+#           mv "{{ myfile_exists.stat.path }}" {{ new_file_loc }}/{{ final_file_name }} 
+
+  - name: Rename file to standard format
+    command:
+      mv "{{ myfile_exists.stat.path }}" {{ new_file_loc }}/{{ final_file_name }}
+    when:
+       myfile_exists.stat.exists
+
 
 # ansible-playbook --ask-become-pass test_rename_file.yml --syntax-check 
-# # ansible-playbook --ask-become-pass test_rename_file.yml 
+# ansible-playbook --ask-become-pass test_rename_file.yml 
+#new_file_loc: /home/fogun/wrkdir
+#final_file_name: db_home_19.15.txt

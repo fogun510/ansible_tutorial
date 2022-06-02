@@ -1,0 +1,8 @@
+---
+- name: Ansible Playbook with files
+  hosts: all
+  tasks:
+    - name: Hello Message
+      script: hello.sh
+...
+
