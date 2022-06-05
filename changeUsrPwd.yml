@@ -1,0 +1,14 @@
+---
+- name: Change user password for user
+  hosts: 10.0.2.4
+  vars:
+    myuser: "demouser1"
+    mypassword: "oracle1234"
+
+  tasks:
+  
+  - name: change password
+    user:
+      name: "{{ myuser }}"
+      state: present
+      password: "{{ mypassword | password_hash('sha512')  }}"

@@ -1,0 +1,70 @@
+---
+- name: Demo playbook on User management
+  hosts: 10.0.2.4
+  become: yes
+  
+  tasks:
+
+  # This tasks creates groups
+  - name: add a group
+    group:
+      name={{ item }}
+      state=present
+    with_items:
+      - demogrp
+    tags: add_new_group
+  
+
+  # This tasks adds several users
+  - name: Add serveral users
+    user:
+      name={{ item }}
+      state=present
+      groups=demogrp
+      shell=/bin/bash
+    with_items:
+      - demouser1
+    tags: add_new_user
+
+  # Generate public keys for user
+  - name: generate ssh keys for a user
+    user:
+      name={{ item }}
+      generate_ssh_key=yes
+      ssh_key_bits=4096
+      ssh_key_file=.ssh/ansible
+    with_items:
+      - demouser1
+    tags: generate_ssh_keys
+ 
+  # This tasks copies the public key to the user account
+  - name: Update authorized keys for a user
+    authorized_key:
+      user: demouser1
+      state: present
+      key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/ansible.pub') }}"
+    tags: copy_pub_key
+ 
+  # This task to delete the user
+  - name: Delete several users
+    user:
+      name={{ item }}
+      state=absent
+    with_items:
+      - demouser1
+    tags: remove_user
+  
+  # This task is to delete the groups
+  - name: delete groups
+    group:
+      name={{ item }}
+      state=absent
+    with_items:
+      - demogrp
+    tags: remove_group
+  
+  
+# ansible-playbook usermanagement.yml --syntax-check
+# ansible-playbook usermanagement.yml --list-tags
+# ansible-playbook usermanagement.yml 
+# ansible-playbook usermanagement.yml --tags

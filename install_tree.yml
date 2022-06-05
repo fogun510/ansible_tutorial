@@ -1,0 +1,15 @@
+---
+- name: Installing the TREE package
+  hosts: 10.0.2.4
+  
+  tasks:
+  - name: Installing package tree
+    yum: 
+      name: tree 
+      state: latest
+    register: result
+
+#  - debug: 
+#      var: result
+...
+

@@ -1,0 +1,13 @@
+---
+- name: Add User to target Machine
+  hosts: 10.0.2.4
+  
+  tasks:
+  
+  - name: Creating user
+    user: 
+      name: steph
+      state: absent
+#      password: "{{ 'password' | password_hash('sha512') }}"
+...
+

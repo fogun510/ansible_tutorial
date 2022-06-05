@@ -1,0 +1,33 @@
+---
+- name: Test Error Handling
+  hosts: 10.0.2.4
+  remote_user: fogun
+  become: yes
+
+  tasks:
+    - name: Testing Ignore Errors
+      user: name=ben password={{ uPassword }}
+      ignore_errors: yes
+
+    - name: Next task
+      shell: echo Hello World
+
+    - name: Quick echo
+      shell: echo $PATH
+      register: result
+      changed_when: false
+
+    - debug: msg="Stop running playbook if the play failed"
+      failed_when: result|failed
+
+    - name: echo failed
+      shell: echo I failed
+      register: output
+
+    - debug: msg="Okay really stop the playbook"
+      failed_when: output.stdout.find('failed') != -1
+
+    - name: Just adding another task in here to show you that it will stop
+      shell: echo hello world
+...
+
